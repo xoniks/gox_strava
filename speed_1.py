@@ -20,7 +20,9 @@ def shift_dates(gpx, days=1):
                     point.time += timedelta(days=days)
 
 def adjust_speed(gpx, speed_factor):
-    """Adjusts the speed by scaling time intervals between points."""
+    """Adjusts the speed by scaling time intervals between points.
+    To increase speed, speed_factor should be less than 1.
+    For example, a speed_factor of 0.5 will double the speed."""
     for track in gpx.tracks:
         for segment in track.segments:
             previous_point_time = None
@@ -31,7 +33,8 @@ def adjust_speed(gpx, speed_factor):
                 if point.time and previous_point_time:
                     # Scale the time interval between the current point and the previous point
                     time_diff = point.time - previous_point_time
-                    new_time_diff = timedelta(seconds=time_diff.total_seconds() / speed_factor)
+                    # Apply speed factor
+                    new_time_diff = timedelta(seconds=time_diff.total_seconds() * speed_factor)
                     point.time = previous_point_time + new_time_diff
                     previous_point_time = point.time
 
@@ -42,9 +45,9 @@ def save_gpx_file(gpx, file_path):
 
 # Specify the path to your original GPX file and the output file
 original_file_path = 'Morning_Ride (2).gpx'
-modified_file_path = 'skenderaj_2.gpx'
-days_to_shift = 2  # Number of days to shift
-speed_factor = 1.5  # Example speed factor to increase speed by 50%
+modified_file_path = 'skenderaj_5.gpx'
+days_to_shift = 5  # Number of days to shift
+speed_factor = 0.1  # Example speed factor to increase speed by 50%
 
 # Process the GPX file
 gpx = read_gpx_file(original_file_path)
